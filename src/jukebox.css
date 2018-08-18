@@ -1,0 +1,83 @@
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: #222;
+}
+
+.jukebox {
+  width: 320px;
+  height: 480px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #777 -webkit-gradient(linear, left bottom, right top, from(#222), color-stop(50%, #444), to(#222));
+  font-size: 9px;
+  line-height: 18px;
+  position: relative;
+}
+
+.label{
+  width: 300px;
+  height: 62px;
+  margin: 0 auto 4px;
+  display: flex;
+  background: url('images/sprite.png') 0 -126px;
+  background-size: 320px 480px;
+  font-family: Arial Rounded MT Bold, arial, sans-serif;
+}
+
+.label dl {
+  width: 50%;
+  margin: 0;
+  color: #444;
+  position: relative;
+}
+
+.label dl:last-child {
+  text-align: right;
+}
+
+.label dt {
+  display: none;
+}
+
+.label dd {
+  margin: 4px 0;
+  text-align: center;
+  font-size: 9px;
+  font-family: Arial Rounded MT Bold, arial;
+}
+
+.label dd span {
+  position: absolute;
+}
+
+span.A{
+  left: 13px;
+}
+
+span.B{
+  right: 13px;
+}
+
+.label dd.top {
+  margin: 9px 0 0;
+}
+
+.label dd.bottom {
+  margin: 8px 0 0;
+}
+
+.speaker {
+  background: url('images/sprite.png') 0 -380px;
+  width: 300px;
+  height: 93px;
+  margin: 0 auto;
+  background-size: 320px 480px;
+}
+

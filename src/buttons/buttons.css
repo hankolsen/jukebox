@@ -1,0 +1,84 @@
+button {
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: Arial Rounded MT Bold, arial, sans-serif;
+  text-align: center;
+  cursor: pointer;
+  background: url('../images/sprite.png') 0 0;
+  background-size: 320px 480px;
+}
+
+.controlButtons {
+  position: relative;
+  top: -45px;
+  font-size: 8px;
+  line-height: 32px;
+  z-index: 1;
+}
+
+.controlButtons button {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  color: #fff;
+  font-size: 8px;
+}
+
+.controlButtons button:active {
+  top: 1px;
+}
+
+.controlButtons button.disabled:active {
+  top: 0;
+}
+
+button.disabled {
+  color: #999;
+}
+
+button.disabled:hover {
+  cursor: default;
+}
+
+.button__play {
+  right: 10px;
+}
+
+.button__clear {
+  left: 10px;
+}
+
+.selectorButtons {
+  width: 300px;
+  height: 35px;
+  margin: 0 auto 4px;
+  background: url('../images/sprite.png') 0 -285px;
+  text-align: center;
+  background-size: 320px 480px;
+}
+
+.selectorButtons button {
+  position: relative;
+  width: 69px;
+  height: 22px;
+  z-index: 1;
+  margin-top: 7px;
+  background: url('../images/sprite.png') -36px 0;
+  line-height: 22px;
+  color: #000;
+  font-size: 16px;
+  transition: top .1s ease-in-out;
+  background-size: 320px 480px;
+}
+
+.selectorButtons button.pressed {
+  top: 2px;
+}
+
+.selectorButtons button span {
+  display: inline-block;
+  width: 69px;
+}
+

@@ -1,0 +1,51 @@
+.tonearm {
+  position: absolute;
+  top: -107px;
+  right: 10px;
+  width: 55px;
+  height: 340px;
+  z-index: 3;
+  overflow: visible;
+}
+
+/**
+ * Sits inside the .tonearm div
+ * used to make the tonearm wobble
+ */
+.innerarm {
+  width: 100%;
+  height: 100%;
+}
+
+.tonearm .tonearm__image {
+  position: absolute;
+  bottom: -14px;
+  right: -10px;
+  height: 250px;
+  transform: rotate3d(1,0,0,20deg);
+  transition: transform 0.4s linear;
+  background: url(../images/table_tonearm.png) no-repeat;
+  background-size: 100% 100%;
+  width: 70px;
+}
+
+.tonearm.in {
+  transform: rotate3d(0,0,1,11deg);
+  transition: transform 1s linear;
+}
+
+.tonearm.out {
+  transform: rotate3d(0,0,1,0deg);
+  transition: transform 1s linear;
+}
+
+.tonearm.wobble .innerarm {
+  animation: wobble 1.5s ease-in-out infinite
+}
+
+@-webkit-keyframes wobble {
+  0% { transform: rotate3d(0,0,1,0deg); }
+  25% { transform: rotate3d(0,0,1,0.5deg);}
+  75% { transform: rotate3d(0,0,1,-0.25deg);}
+  100% { transform: rotate3d(0,0,1,0deg)}
+}
