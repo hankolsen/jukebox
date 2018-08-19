@@ -1,5 +1,5 @@
-import './buttons.css';
+import './playButton';
+import './clearButton';
+import './selectorButtons';
 
-export * from './playButton';
-export * from './clearButton';
-export * from './selectorButtons';
+import './buttons.css';

@@ -14,14 +14,14 @@
 }
 
 .ring {
-  background: url('../images/table_platter.png');
+  background: url('/public/images/table_platter.png');
   background-size: 100%;
   width: 100%;
   height: 100%;
 }
 
 .slipmat {
-  background: url('../images/slipmat.jpg') no-repeat;
+  background: url('/public/images/slipmat.jpg') no-repeat;
   background-size: 240px 240px;
   position: absolute;
   left: 50%;

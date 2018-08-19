@@ -1,14 +1,20 @@
-import { pause as playerPause, play as playerPlay } from '../player';
+import { publish, subscribe } from '../pubsub';
+import {
+  AUDIO_PLAY,
+  PLAYBUTTON_PAUSE,
+  PLAYBUTTON_PLAY,
+  PLAYER_EJECT_RECORD,
+} from '../events';
 
 const playButton = document.querySelector('.button__play');
 let isDisabled = false;
 
 const play = () => {
-  playerPlay();
+  publish(PLAYBUTTON_PLAY);
 };
 
 const pause = () => {
-  playerPause();
+  publish(PLAYBUTTON_PAUSE);
 };
 
 const disable = () => {
@@ -46,4 +52,5 @@ playButton.addEventListener('click', () => {
 
 disable();
 
-export { startedPlaying, resetPlayButton };
+subscribe(AUDIO_PLAY, startedPlaying);
+subscribe(PLAYER_EJECT_RECORD, resetPlayButton);

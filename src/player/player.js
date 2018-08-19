@@ -1,42 +1,34 @@
-import {
-  pause as pauseAudio, play as playAudio, remainingTime, removeSong, setSong,
-} from '../audio';
-import { pause as platterPause, play as platterPlay, reset as platterReset } from '../platter';
-import {
-  clearAll as resetSelectorButtons,
-  disable as disableClearButton,
-  enable as enableClearButton,
-  resetPlayButton,
-  startedPlaying,
-} from '../buttons';
-import { rollInRecord, rollOutRecord, setImage } from '../record';
-import {
-  moveToneArmToStart,
-  pause as tonearmPause,
-  play as tonearmPlay,
-  returnToRest as tonearmReturn,
-} from '../tonearm';
+import { publish, subscribe } from '../pubsub';
+import { getRemainingTime } from '../audio';
 
-import './player.css';
+import {
+  CLEARBUTTON_CLICK,
+  PLAYBUTTON_PAUSE,
+  PLAYBUTTON_PLAY,
+  PLAYER_CLEAR_RECORD, PLAYER_EJECT_RECORD, PLAYER_INSERT_RECORD,
+  PLAYER_PAUSE,
+  PLAYER_PLAY, RECORD_IS_INSERTED, SELECTORBUTTONS_SELECTION, TONEARM_READY,
+} from '../events';
+
 
 const songs = {
   A: [
     {
-      url: 'src/audio/1Monster.mp3',
+      url: 'public/audio/1Monster.mp3',
       title: 'Monster',
-      label: 'src/images/dd-single.png',
+      label: 'public/images/dd-single.png',
     },
   ],
   B: [
     {
-      url: 'src/audio/2Three.mp3',
+      url: 'public/audio/2Three.mp3',
       title: 'Three Times a Sinner',
-      label: 'src/images/dd-single.png',
+      label: 'public/images/dd-single.png',
     },
     {
-      url: 'src/audio/3Out.mp3',
+      url: 'public/audio/3Out.mp3',
       title: 'Out in the Rain',
-      label: 'src/images/dd-single.png',
+      label: 'public/images/dd-single.png',
     },
   ],
 };
@@ -45,60 +37,36 @@ const songs = {
 let hasRecord = false;
 
 const insertRecord = ({ letter, number }) => {
-  disableClearButton();
-  const selectedSong = songs[letter][number] || { url: 'src/audio/endnoise.mp3' };
-  setSong(selectedSong);
-  setImage({ path: selectedSong.label });
-  rollInRecord();
+  const selectedSong = songs[letter][number] || { url: 'public/audio/endnoise.mp3' };
+  const { label, url } = selectedSong;
+  publish(PLAYER_INSERT_RECORD, { label, url });
 };
 
 const play = () => {
-  platterPlay();
-  tonearmPlay();
-  setTimeout(() => {
-    playAudio()
-      .then(() => {
-        startedPlaying();
-        enableClearButton();
-      });
-  }, 700);
+  const remainingTime = getRemainingTime();
+  publish(PLAYER_PLAY, { remainingTime });
 };
 
 const pause = () => {
-  tonearmPause();
-  setTimeout(pauseAudio, 200);
-  setTimeout(platterPause, 500);
+  publish(PLAYER_PAUSE);
 };
 
 const recordIsInserted = () => {
   hasRecord = true;
-  moveToneArmToStart().then(() => {
-    play();
-  });
-};
-
-const ejectRecord = () => {
-  rollOutRecord();
-  hasRecord = false;
 };
 
 const clearLoadedRecord = () => {
   if (!hasRecord) {
     return;
   }
-
   pause();
-  tonearmReturn();
-  platterReset();
+  publish(PLAYER_CLEAR_RECORD);
+
   setTimeout(() => {
-    ejectRecord();
-    removeSong();
-    resetSelectorButtons();
-    resetPlayButton();
+    hasRecord = false;
+    publish(PLAYER_EJECT_RECORD);
   }, 1000);
 };
-
-const getRemainingTime = () => remainingTime();
 
 const setupLabels = () => {
   const label = document.querySelector('.label');
@@ -125,13 +93,9 @@ const setupLabels = () => {
 };
 
 setupLabels();
-
-export {
-  insertRecord,
-  play,
-  pause,
-  recordIsInserted,
-  getRemainingTime,
-  clearLoadedRecord,
-  songs,
-};
+subscribe(PLAYBUTTON_PLAY, play);
+subscribe(PLAYBUTTON_PAUSE, pause);
+subscribe(CLEARBUTTON_CLICK, clearLoadedRecord);
+subscribe(TONEARM_READY, play);
+subscribe(SELECTORBUTTONS_SELECTION, insertRecord);
+subscribe(RECORD_IS_INSERTED, recordIsInserted);

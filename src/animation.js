@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign, no-param-reassign */
 const capitalize = str => [str.slice(0, 1).toUpperCase(), ...str.slice(1)].join();
 
 /**
@@ -19,7 +20,7 @@ const getAnimatableEndEvent = function whichAnimationType(type) {
     [`O${capitalType}`]: `o${capitalType}End`,
     [`Moz${capitalType}`]: `${type}end`,
     [`Webkit${capitalType}`]: `webkit${capitalType}End`,
-    [`MS${capitalType}`]: `MS${capitalType}End`
+    [`MS${capitalType}`]: `MS${capitalType}End`,
   };
 
   const hasEventEnd = Object.keys(animations).some((item) => {
@@ -40,7 +41,7 @@ const getAnimatableEndEvent = function whichAnimationType(type) {
 
 const setAnimation = (el, animation) => el.style.webkitAnimation = animation;
 
-const setAnimationPlayState = (el, state) => el.style.animationPlayState = state ? 'running': 'paused';
+const setAnimationPlayState = (el, state) => el.style.animationPlayState = state ? 'running' : 'paused';
 
 const rotateX = (el, angle) => el.style.transform = `rotate3d(1, 0, 0, ${angle}deg)`;
 
@@ -48,17 +49,16 @@ const setTransitionDuration = (el, duration) => el.style.transition = `transform
 
 const setRotationAngle = (el, angle) => el.style.transform = `rotate3d(0, 0, 1, ${angle}deg`;
 
-const removeTransition = (el) => el.style.transition = '';
+const removeTransition = el => el.style.transition = '';
 
-const removeTransform = (el) => el.style.transform = '';
-
-const setCurrentRotation = (el) => el.style.transform = getMatrix(el);
+const removeTransform = el => el.style.transform = '';
 
 const getMatrix = (el) => {
   const style = window.getComputedStyle(el, null);
   return style.getPropertyValue('-webkit-transform') || style.getPropertyValue('transform');
-
 };
+
+const setCurrentRotation = el => el.style.transform = getMatrix(el);
 
 export {
   getAnimatableEndEvent,

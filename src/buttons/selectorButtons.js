@@ -1,4 +1,5 @@
-import { insertRecord } from '../player';
+import { publish, subscribe } from '../pubsub';
+import { CLEARBUTTON_CLICK, PLAYER_EJECT_RECORD, SELECTORBUTTONS_SELECTION } from '../events';
 
 const selectorButtons = [...document.querySelectorAll('.selectorButtons button')];
 let isLocked = false;
@@ -56,10 +57,9 @@ selectorButtons.forEach((button) => {
 
     if (validSelection()) {
       lock();
-      insertRecord({
-        letter: pressedButtons.button__letter,
-        number: parseInt(pressedButtons.button__number, 10) - 1,
-      });
+      const letter = pressedButtons.button__letter;
+      const number = parseInt(pressedButtons.button__number, 10) - 1;
+      publish(SELECTORBUTTONS_SELECTION, { letter, number });
     }
   });
 });
@@ -69,5 +69,5 @@ const clearAll = () => {
   unlock();
 };
 
-/* eslint-disable import/prefer-default-export */
-export { clearAll };
+subscribe(PLAYER_EJECT_RECORD, clearAll);
+subscribe(CLEARBUTTON_CLICK, clearAll);

@@ -1,5 +1,5 @@
-import { clearAll as clearAllSelectorButtons } from './selectorButtons';
-import { clearLoadedRecord } from '../player';
+import { publish, subscribe } from '../pubsub';
+import { AUDIO_PLAY, CLEARBUTTON_CLICK, PLAYER_INSERT_RECORD } from '../events';
 
 const clearButton = document.querySelector('.button__clear');
 
@@ -20,8 +20,8 @@ clearButton.addEventListener('click', () => {
     return;
   }
 
-  clearAllSelectorButtons();
-  clearLoadedRecord();
+  publish(CLEARBUTTON_CLICK);
 });
 
-export { enable, disable };
+subscribe(PLAYER_INSERT_RECORD, disable);
+subscribe(AUDIO_PLAY, enable);

@@ -1,1 +1,2 @@
-export * from './tonearm';
+import './tonearm';
+import './tonearm.css';

@@ -1,6 +1,14 @@
+import { publish, subscribe } from './pubsub';
+import {
+  AUDIO_PLAY, PLAYER_EJECT_RECORD,
+  PLAYER_INSERT_RECORD,
+  PLAYER_PAUSE,
+  PLAYER_PLAY,
+} from './events';
+
 let songHasEnded = false;
 let song = new Audio();
-const endNoise = new Audio('src/audio/endnoise.mp3');
+const endNoise = new Audio('public/audio/endnoise.mp3');
 endNoise.loop = true;
 
 const playEndNoise = () => endNoise.play();
@@ -15,8 +23,8 @@ const loadSong = () => {
   song.addEventListener('ended', songEnded);
 };
 
-const setSong = (selectedSong) => {
-  song.src = selectedSong.url;
+const setSong = ({ url }) => {
+  song.src = url;
   loadSong();
 };
 
@@ -31,17 +39,21 @@ const pauseEndNoise = () => {
 
 const play = () => {
   if (songHasEnded) {
-    return playEndNoise();
+    playEndNoise();
   }
 
-  return playSong();
+  playSong().then(() => {
+    setTimeout(() => {
+      publish(AUDIO_PLAY);
+    }, 700);
+  });
 };
 
 const pause = () => {
   if (songHasEnded) {
     pauseEndNoise();
   } else {
-    pauseSong();
+    setTimeout(pauseSong, 200);
   }
 };
 
@@ -52,12 +64,18 @@ const removeSong = () => {
   song = new Audio();
 };
 
-const remainingTime = () => song.duration - song.currentTime;
+const getRemainingTime = () => song.duration - song.currentTime;
+
+subscribe(PLAYER_PAUSE, pause);
+
+subscribe(PLAYER_INSERT_RECORD, setSong);
+
+subscribe(PLAYER_PLAY, () => {
+  setTimeout(play, 700);
+});
+
+subscribe(PLAYER_EJECT_RECORD, removeSong);
 
 export {
-  play,
-  pause,
-  setSong,
-  removeSong,
-  remainingTime,
+  getRemainingTime,
 };

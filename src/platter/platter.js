@@ -1,3 +1,5 @@
+import { subscribe } from '../pubsub';
+import { PLAYER_CLEAR_RECORD, PLAYER_PAUSE, PLAYER_PLAY } from '../events';
 import {
   getAnimatableEndEvent,
   setAnimationPlayState,
@@ -5,7 +7,6 @@ import {
   setRotationAngle,
   setTransitionDuration,
 } from '../animation';
-import './platter.css';
 
 const platter = document.querySelector('.platter');
 
@@ -22,7 +23,7 @@ const play = () => {
 };
 
 const pause = () => {
-  stopSpinning();
+  setTimeout(stopSpinning, 500);
 };
 
 const reset = () => {
@@ -43,4 +44,6 @@ const reset = () => {
   });
 };
 
-export { play, pause, reset };
+subscribe(PLAYER_PLAY, play);
+subscribe(PLAYER_PAUSE, pause);
+subscribe(PLAYER_CLEAR_RECORD, reset);

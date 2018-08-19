@@ -1,48 +1,45 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-
-module.exports = {
-  devtool: 'inline-source-map',
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
-      },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: "html-loader",
-            options: { minimize: true }
-          }
-        ]
-      },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-      },
-      {
-        test: /\.(png|svg|jpg|gif|mp3)$/,
-        use: [
-          'file-loader'
-        ]
-      }
-    ]
-  },
-  plugins: [
-    new CleanWebpackPlugin('dist'),
-    new HtmlWebPackPlugin({
-      template: "./src/index.html",
-    }),
-    new BundleAnalyzerPlugin()
-  ]
+module.exports = (env, options) => {
+  return {
+    devtool: options.mode !== 'production' && 'inline-source-map',
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+          },
+        },
+        {
+          test: /\.html$/,
+          use: [
+            {
+              loader: 'html-loader',
+              options: { minimize: true },
+            },
+          ],
+        },
+        {
+          test: /\.css$/,
+          use: [
+            'style-loader',
+            'css-loader',
+          ],
+        },
+      ],
+    },
+    plugins: [
+      new CleanWebpackPlugin('dist'),
+      new HtmlWebPackPlugin({
+        template: './src/index.html',
+      }),
+      new CopyWebpackPlugin([{
+        from: 'public/**/*',
+      }]),
+    ],
+  };
 };

@@ -1,1 +1,2 @@
-export * from './record';
+import './record';
+import './record.css';

@@ -6,7 +6,7 @@ button {
   font-family: Arial Rounded MT Bold, arial, sans-serif;
   text-align: center;
   cursor: pointer;
-  background: url('../images/sprite.png') 0 0;
+  background: url('/public/images/sprite.png') 0 0;
   background-size: 320px 480px;
 }
 
@@ -54,7 +54,7 @@ button.disabled:hover {
   width: 300px;
   height: 35px;
   margin: 0 auto 4px;
-  background: url('../images/sprite.png') 0 -285px;
+  background: url('/public/images/sprite.png') 0 -285px;
   text-align: center;
   background-size: 320px 480px;
 }
@@ -65,7 +65,7 @@ button.disabled:hover {
   height: 22px;
   z-index: 1;
   margin-top: 7px;
-  background: url('../images/sprite.png') -36px 0;
+  background: url('/public/images/sprite.png') -36px 0;
   line-height: 22px;
   color: #000;
   font-size: 16px;

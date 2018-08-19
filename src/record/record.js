@@ -1,14 +1,14 @@
-import { recordIsInserted } from '../player';
-import './record.css';
+import { publish, subscribe } from '../pubsub';
+import { PLAYER_EJECT_RECORD, PLAYER_INSERT_RECORD, RECORD_IS_INSERTED } from '../events';
 import { getAnimatableEndEvent } from '../animation';
 
 const record = document.querySelector('.record-ui');
 const player = document.querySelector('.player');
 let animationEndEvent;
 
-const setImage = ({ path }) => {
-  if (path) {
-    record.style.backgroundImage = `url("${path}")`;
+const setImage = ({ label }) => {
+  if (label) {
+    record.style.backgroundImage = `url("${label}")`;
   }
 };
 
@@ -17,7 +17,7 @@ const rolledIn = () => {
   record.classList.remove('rollin');
   // Put the Play/Pause buttons on top again to be able to control the player
   player.classList.remove('ontop');
-  recordIsInserted();
+  publish(RECORD_IS_INSERTED);
 };
 
 const rollInRecord = () => {
@@ -42,5 +42,9 @@ const rollOutRecord = () => {
   record.addEventListener(animationEndEvent, rolledOut, false);
 };
 
+subscribe(PLAYER_INSERT_RECORD, ({ label }) => {
+  rollInRecord();
+  setImage({ label });
+});
 
-export { setImage, rollInRecord, rollOutRecord };
+subscribe(PLAYER_EJECT_RECORD, rollOutRecord);

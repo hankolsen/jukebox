@@ -1,3 +1,10 @@
+import { publish, subscribe } from '../pubsub';
+import {
+  PLAYER_CLEAR_RECORD,
+  PLAYER_PAUSE,
+  PLAYER_PLAY, RECORD_IS_INSERTED,
+  TONEARM_READY,
+} from '../events';
 import {
   getAnimatableEndEvent,
   removeTransform, removeTransition,
@@ -7,9 +14,6 @@ import {
   setTransitionDuration,
 } from '../animation';
 
-import './tonearm.css';
-import { getRemainingTime } from '../player';
-
 const MAX_ANGLE = 25;
 
 const tonearm = document.querySelector('.tonearm');
@@ -18,7 +22,9 @@ const tonearmImage = tonearm.querySelector('.tonearm__image');
 const moveToneArmToStart = () => {
   const transitionEndEvent = getAnimatableEndEvent('transition');
   tonearm.classList.add('in');
-  return new Promise(resolve => tonearm.addEventListener(transitionEndEvent, resolve));
+  tonearm.addEventListener(transitionEndEvent, () => {
+    publish(TONEARM_READY);
+  }, { once: true });
 };
 
 const lowerArm = () => {
@@ -37,15 +43,15 @@ const stopMoving = () => {
   stopWobble();
 };
 
-function playToEnd() {
-  setTransitionDuration(tonearm, getRemainingTime());
+function playToEnd({ remainingTime }) {
+  setTransitionDuration(tonearm, remainingTime);
   setRotationAngle(tonearm, MAX_ANGLE);
   startWobble();
 }
 
-const play = () => {
+const play = ({ remainingTime }) => {
   lowerArm();
-  playToEnd();
+  playToEnd({ remainingTime });
   tonearm.classList.remove('in');
 };
 
@@ -67,10 +73,7 @@ const returnToRest = () => {
   tonearm.addEventListener(transitionEndEvent, resetTransition, { once: true });
 };
 
-export {
-  moveToneArmToStart,
-  returnToRest,
-  lowerArm,
-  play,
-  pause,
-};
+subscribe(PLAYER_PLAY, play);
+subscribe(PLAYER_PAUSE, pause);
+subscribe(PLAYER_CLEAR_RECORD, returnToRest);
+subscribe(RECORD_IS_INSERTED, moveToneArmToStart);

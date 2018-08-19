@@ -24,7 +24,7 @@
   height: 250px;
   transform: rotate3d(1,0,0,20deg);
   transition: transform 0.4s linear;
-  background: url(../images/table_tonearm.png) no-repeat;
+  background: url(/public/images/table_tonearm.png) no-repeat;
   background-size: 100% 100%;
   width: 70px;
 }
